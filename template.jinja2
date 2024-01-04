@@ -3,7 +3,7 @@ interfaces {
     {% for interface in device.interfaces.all() %}
     {% if interface.enabled %}
     {{ interface.name }} {
-       description "{{ interface.description }}" 
+       description "{{ interface.label }}" 
     }
     {% endif %}
     {% endfor %}
