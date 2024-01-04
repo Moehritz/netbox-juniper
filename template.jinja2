@@ -4,9 +4,15 @@ interfaces {
     {{ interface.name }} {
         description "{{ interface.label }}";
         {% if interface.enabled %}
-        unit 0 {
-
+        {% if interface.lag %}
+        ether-options {
+            802.3ad {{ interface.lag.name }};
         }
+        {% else %}
+        unit 0 {
+            
+        }
+        {% endif %}
         {% else %}
         disable;
         {% endif %}
