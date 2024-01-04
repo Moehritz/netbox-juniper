@@ -1,6 +1,8 @@
 hallo {{device.name}}
 
-{% for interface in device.interfaces.all() %}
-set interfaces {{ interface.name }}
-{% endfor %}
+interfaces {
+    {% for interface in device.interfaces.all() %}
+    set interfaces {{ interface.name }}
+    {% endfor %}
+}
 
