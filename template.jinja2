@@ -1,10 +1,9 @@
-hallo {{device.name}}
-
-juchu
-
+# System Interfaces Configuration for {{device.name}}
 interfaces {
     {% for interface in device.interfaces.all() %}
-    set interfaces {{ interface.name }}
+    {{ interface.name }} {
+        
+    }
     {% endfor %}
 }
 
