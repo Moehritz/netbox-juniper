@@ -1,7 +1,7 @@
 # System Interfaces Configuration for {{device.name}}
 interfaces {
     {% for interface in device.interfaces.all() %}
-    {% if interface.connected %}
+    {% if interface.status == "ACTIVE" %}
     {{ interface.name }} {
         description "{{ interface.label }}";
         {% if not interface.enabled %}
