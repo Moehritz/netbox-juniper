@@ -2,21 +2,7 @@
 
 {% set vars = {'vrrp': False} %}
 
-interfaces {
-    {% for iface in device.interfaces.all() %}
-    {{ iface.name }} {
-        description "{{ iface.label }}";
-        {% if iface.enabled %}
-        {% if iface.lag %}
-        ether-options {
-            802.3ad {{ iface.lag.name }};
-        }
-        {% else %}
-        {% set ipv4 = iface.ip_addresses.filter(address__net_contained="0/0") %}
-        {% set ipv6 = iface.ip_addresses.filter(address__net_contained="::/0") %}
-        {% if ipv4 or ipv6 %}
-        unit 0 {
-            {% if ipv4 %}
+{% macro printIps(ips) %}
             {% set fhrps = iface.fhrp_group_assignments.all() %}
             family inet {
                 {% for ip in ipv4 %}
@@ -38,6 +24,24 @@ interfaces {
                 {% endif %}
                 {% endfor %}
             }
+{% endmacro %}
+
+interfaces {
+    {% for iface in device.interfaces.all() %}
+    {{ iface.name }} {
+        description "{{ iface.label }}";
+        {% if iface.enabled %}
+        {% if iface.lag %}
+        ether-options {
+            802.3ad {{ iface.lag.name }};
+        }
+        {% else %}
+        {% set ipv4 = iface.ip_addresses.filter(address__net_contained="0/0") %}
+        {% set ipv6 = iface.ip_addresses.filter(address__net_contained="::/0") %}
+        {% if ipv4 or ipv6 %}
+        unit 0 {
+            {% if ipv4 %}
+            {% printIps(ipv4) %}
             {% endif %}
         }
         {% endif %}
