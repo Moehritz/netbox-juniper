@@ -11,15 +11,10 @@ interfaces {
         {% else %}
         unit 0 {
             family inet {
-                % for ip in iface.ip_addresses.filter(address__address__version=4) %
+                {% for ip in iface.ip_addresses.all() %}
                 address {{ ip }};
                 {{ ip.address }} {{ ip.address.version }}
-                % endfor %
-            }
-            family inet6 {
-                % for ip in iface.ip_addresses.filter(address__gte=6) %
-                address {{ ip }};
-                % endfor %
+                {% endfor %}
             }
         }
         {% endif %}
