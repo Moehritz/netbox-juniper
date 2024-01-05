@@ -1,22 +1,22 @@
 # System Interfaces Configuration for {{device.name}}
 interfaces {
-    {% for interface in device.interfaces.all() %}
-    {{ interface.name }} {
-        description "{{ interface.label }}";
-        {% if interface.enabled %}
-        {% if interface.lag %}
+    {% for iface in device.interfaces.all() %}
+    {{ iface.name }} {
+        description "{{ iface.label }}";
+        {% if iface.enabled %}
+        {% if iface.lag %}
         ether-options {
-            802.3ad {{ interface.lag.name }};
+            802.3ad {{ iface.lag.name }};
         }
         {% else %}
         unit 0 {
             family inet {
-                {% for ip in interface.ip_addresses.filter(address__address__version=4) %}
+                {% for ip in iface.ip_addresses.filter(address__address__version=4) %}
                 address {{ ip }};
                 {% endfor %}
             }
             family inet6 {
-                {% for ip in interface.ip_addresses.filter(address__address_version=6) %}
+                {% for ip in iface.ip_addresses.filter(address__address__version=6) %}
                 address {{ ip }};
                 {% endfor %}
             }
