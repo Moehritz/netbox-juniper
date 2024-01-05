@@ -11,12 +11,12 @@ interfaces {
         {% else %}
         unit 0 {
             family inet {
-                {% for ip in interface.ip_addresses.filter(version__eq=4) %}
+                {% for ip in interface.ip_addresses.filter(address__version=4) %}
                 address {{ ip }};
                 {% endfor %}
             }
             family inet6 {
-                {% for ip in interface.ip_addresses.filter(version__eq=6) %}
+                {% for ip in interface.ip_addresses.filter(address__version=6) %}
                 address {{ ip }};
                 {% endfor %}
             }
