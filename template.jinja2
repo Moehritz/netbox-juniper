@@ -23,6 +23,7 @@ interfaces {
                     {% if vips and vips[0].network == ip.network %}
                     VRRP ON
                     {% endif %}
+                {% endfor %}
                 address {{ ip }};
                 {% endfor %}
             }
