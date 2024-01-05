@@ -10,12 +10,10 @@ interfaces {
         }
         {% else %}
         unit 0 {
+            {% set ipv4 = iface.ip_addresses.filter(address__net_contained="0/0") %
+            {% if ipv4 %}
             family inet {
-                {% for ip in iface.ip_addresses.filter(address__net_contained="0/0") %}
-                {% if iface.fhrp_group_assignments.filter(group__ip_addresses__network__in=ip.address) %}
-                address {{ ip }} {
-                    vhrp-group
-                {% endif %}
+                {% for ip in ipv4 %}
                 address {{ ip }};
                 {% endfor %}
             }
