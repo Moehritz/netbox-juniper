@@ -9,16 +9,21 @@ interfaces {
             802.3ad {{ iface.lag.name }};
         }
         {% else %}
+        {% set ipv4 = iface.ip_addresses.filter(address__net_contained="0/0") %}
+        {% set ipv6 = iface.ip_addresses.filter(address__net_contained="::/0") %}
+        {% if ipv4 or ipv6 %}
         unit 0 {
-            {% set ipv4 = iface.ip_addresses.filter(address__net_contained="0/0") %}
             {% if ipv4 %}
+            {% set fhrp = iface.fhvrp_group_assignments.all() %}
             family inet {
                 {% for ip in ipv4 %}
+                {% set group = [f.group for f in fhrp if f.group.ip_addresses.all()] %}
                 address {{ ip }};
                 {% endfor %}
             }
             {% endif %}
         }
+        {% endif %}
         {% endif %}
         {% else %}
         disable;
