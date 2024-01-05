@@ -1,4 +1,7 @@
 # System Interfaces Configuration for {{device.name}}
+
+{% set vars = {'vrrp': False} %}
+
 interfaces {
     {% for iface in device.interfaces.all() %}
     {{ iface.name }} {
@@ -17,18 +20,18 @@ interfaces {
             {% set fhrps = iface.fhrp_group_assignments.all() %}
             family inet {
                 {% for ip in ipv4 %}
-                {% set vrrp = None %}
                 {% for fhrp in fhrps %}
                     {% set vips = fhrp.group.ip_addresses.all() %}
-                    {% set vrrp = fhrp if vips and vips[0].network == ip.network else None %}
+                    {% if vars.update({'vrrp': fhrp if vips and vips[0].network == ip.network else False}) %} {% endif %}
                 {% endfor %}
-                {% if vrrp %}
+                {% if vars.vrrp %}
                 address {{ ip }} {
                     vrrp-group {{ vrrp.group }} {
                         virtual-address {{ vrrp.group.ip_addresses.get().host }};
                         priority {{ vrrp.priority }};
                     }
                 }
+                {% if vars.update({'vrrp': False}) %} {% endif %}
                 {% else %}
                 address {{ ip }};
                 {% endif %}
