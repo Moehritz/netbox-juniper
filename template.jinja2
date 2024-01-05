@@ -11,7 +11,7 @@ interfaces {
         {% else %}
         unit 0 {
             family inet {
-                {% for ip in iface.ip_addresses.filter(address__net_contained=str("0/0") %}
+                {% for ip in iface.ip_addresses.filter(address__net_contained=str("0/0")) %}
                 address {{ ip }};
                 {{ ip.address }} {{ ip.address.version }}
                 {% endfor %}
