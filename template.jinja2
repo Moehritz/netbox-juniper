@@ -25,6 +25,7 @@ interfaces {
                     {% if vars.update({'vrrp': fhrp if vips and vips[0].network == ip.network else False}) %} {% endif %}
                 {% endfor %}
                 {% if vars.vrrp %}
+                {% set vrrp = vars.vrrp %}
                 address {{ ip }} {
                     vrrp-group {{ vrrp.group }} {
                         virtual-address {{ vrrp.group.ip_addresses.get().host }};
