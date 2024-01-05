@@ -28,7 +28,7 @@ interfaces {
                 {% set vrrp = vars.vrrp %}
                 address {{ ip }} {
                     vrrp-group {{ vrrp.group.id }} {
-                        virtual-address {{ vrrp.group.ip_addresses.get() }};
+                        virtual-address {{ vrrp.group.ip_addresses.get().address.ip }};
                         priority {{ vrrp.priority }};
                     }
                 }
