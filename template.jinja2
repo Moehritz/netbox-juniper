@@ -11,7 +11,7 @@ interfaces {
         {% else %}
         unit 0 {
             family inet {
-                {% for ip in interface.ip_addresses.filter(address_address__version=4) %}
+                {% for ip in interface.ip_addresses.filter(address__address__version=4) %}
                 address {{ ip }};
                 {% endfor %}
             }
