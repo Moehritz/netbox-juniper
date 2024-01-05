@@ -14,9 +14,15 @@ interfaces {
         {% if ipv4 or ipv6 %}
         unit 0 {
             {% if ipv4 %}
-            {% set fhrp = iface.fhrp_group_assignments.all() %}
+            {% set fhrps = iface.fhrp_group_assignments.all() %}
             family inet {
                 {% for ip in ipv4 %}
+                {% set vrrp = none %}
+                {% for fhrp in fhrps %}
+                    {% set vips = fhrp.group.ip_addresses.all() %}
+                    {% if vips and vips[0].network = ip.network %}
+                    VRRP ON
+                    {% endif %}
                 address {{ ip }};
                 {% endfor %}
             }
