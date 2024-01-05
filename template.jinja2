@@ -2,10 +2,10 @@
 
 {% set vars = {'vrrp': False} %}
 
-{% macro printIps(ips) %}
+{% macro printIps(iface, ips) %}
             {% set fhrps = iface.fhrp_group_assignments.all() %}
             family inet {
-                {% for ip in ipv4 %}
+                {% for ip in ips %}
                 {% for fhrp in fhrps %}
                     {% set vips = fhrp.group.ip_addresses.all() %}
                     {% if vars.update({'vrrp': fhrp if vips and vips[0].network == ip.network else False}) %} {% endif %}
@@ -41,7 +41,7 @@ interfaces {
         {% if ipv4 or ipv6 %}
         unit 0 {
             {% if ipv4 %}
-            {{ printIps(ipv4) }}
+            {{ printIps(iface, ipv4) }}
             {% endif %}
         }
         {% endif %}
