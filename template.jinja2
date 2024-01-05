@@ -12,7 +12,7 @@ interfaces {
         unit 0 {
             family inet {
                 {% for ip in iface.ip_addresses.filter(address__net_contained="0/0") %}
-                {% if iface.fhrp_group_assignments.filter(group__ip_addresses__contains=ip.address) %}
+                {% if iface.fhrp_group_assignments.filter(group__ip_addresses=ip.address) %}
                 address {{ ip }} {
                     vhrp-group
                 {% endif %}
