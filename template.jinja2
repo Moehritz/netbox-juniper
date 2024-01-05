@@ -17,6 +17,10 @@ interfaces {
             }
             family inet6 {
                 {% for ip in iface.ip_addresses.filter(address__net_contained="::/0") %}
+                {% if iface.vhrp_group_assignments.filter(ip_addresses__net_contained=ip.address) %}
+                address {{ ip }} {
+                    vhrp-group
+                {% endif %}
                 address {{ ip }};
                 {% endfor %}
             }
