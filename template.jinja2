@@ -20,7 +20,7 @@ interfaces {
                 {% set vrrp = none %}
                 {% for fhrp in fhrps %}
                     {% set vips = fhrp.group.ip_addresses.all() %}
-                    {% if vips and vips[0].network = ip.network %}
+                    {% if vips and vips[0].network == ip.network %}
                     VRRP ON
                     {% endif %}
                 address {{ ip }};
