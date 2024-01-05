@@ -3,27 +3,27 @@
 {% set vars = {'vrrp': False} %}
 
 {% macro printIps(iface, ips) %}
-            {% set fhrps = iface.fhrp_group_assignments.all() %}
-            family inet {
-                {% for ip in ips %}
-                {% for fhrp in fhrps %}
-                    {% set vips = fhrp.group.ip_addresses.all() %}
-                    {% if vars.update({'vrrp': fhrp if vips and vips[0].network == ip.network else False}) %} {% endif %}
-                {% endfor %}
-                {% if vars.vrrp %}
-                {% set vrrp = vars.vrrp %}
-                address {{ ip }} {
-                    vrrp-group {{ vrrp.group.id }} {
-                        virtual-address {{ vrrp.group.ip_addresses.get().address.ip }};
-                        priority {{ vrrp.priority }};
-                    }
-                }
-                {% if vars.update({'vrrp': False}) %} {% endif %}
-                {% else %}
-                address {{ ip }};
-                {% endif %}
-                {% endfor %}
-            }
+{% set fhrps = iface.fhrp_group_assignments.all() %}
+family inet {
+    {% for ip in ips %}
+    {% for fhrp in fhrps %}
+        {% set vips = fhrp.group.ip_addresses.all() %}
+        {% if vars.update({'vrrp': fhrp if vips and vips[0].network == ip.network else False}) %} {% endif %}
+    {% endfor %}
+    {% if vars.vrrp %}
+    {% set vrrp = vars.vrrp %}
+    address {{ ip }} {
+        vrrp-group {{ vrrp.group.id }} {
+            virtual-address {{ vrrp.group.ip_addresses.get().address.ip }};
+            priority {{ vrrp.priority }};
+        }
+    }
+    {% if vars.update({'vrrp': False}) %} {% endif %}
+    {% else %}
+    address {{ ip }};
+    {% endif %}
+    {% endfor %}
+}
 {% endmacro %}
 
 interfaces {
@@ -41,7 +41,7 @@ interfaces {
         {% if ipv4 or ipv6 %}
         unit 0 {
             {% if ipv4 %}
-            {{ printIps(iface, ipv4) }}
+            {{ printIps(iface, ipv4)|indent(12, False) }}
             {% endif %}
         }
         {% endif %}
