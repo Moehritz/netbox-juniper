@@ -39,14 +39,14 @@ interfaces {
         {% set ipv4 = iface.ip_addresses.filter(address__net_contained="0/0") %}
         {% set ipv6 = iface.ip_addresses.filter(address__net_contained="::/0") %}
         unit 0 {
-            {% if ipv4 or ipv6 %}
+        {% if ipv4 or ipv6 %}
             {% if ipv4 %}
             {{ printIps(iface, ipv4)|indent(12, False) }}
             {% endif %}
             {% if ipv6 %}
             {{ printIps(iface, ipv6)|indent(12, False) }}
             {% endif %}
-            {% elif iface.untagged_vlan or iface.tagged_vlans %}
+        {% elif iface.untagged_vlan or iface.tagged_vlans %}
             family ethernet_switching {
                 {% if iface.untagged_vlan %}
                 interface-mode access;
@@ -56,9 +56,8 @@ interfaces {
                 members [ {{ iface.tagged_vlans|join(', ') }} ];
                 {% endif %}
             }
-            {% endif %}
-        }
         {% endif %}
+        }
         {% endif %}
         {% else %}
         disable;
