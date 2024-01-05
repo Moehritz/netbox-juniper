@@ -10,13 +10,14 @@ interfaces {
         }
         {% else %}
         unit 0 {
-            {% set ipv4 = iface.ip_addresses.filter(address__net_contained="0/0") %
+            {% set ipv4 = iface.ip_addresses.filter(address__net_contained="0/0") %}
             {% if ipv4 %}
             family inet {
                 {% for ip in ipv4 %}
                 address {{ ip }};
                 {% endfor %}
             }
+            {% endif %}
         }
         {% endif %}
         {% else %}
