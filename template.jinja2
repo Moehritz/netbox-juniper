@@ -17,7 +17,6 @@ interfaces {
             {% set fhrp = iface.fhvrp_group_assignments.all() %}
             family inet {
                 {% for ip in ipv4 %}
-                {% set group = [f.group for f in fhrp if f.group.ip_addresses.all()] %}
                 address {{ ip }};
                 {% endfor %}
             }
