@@ -41,7 +41,7 @@ interfaces {
         {% if ipv4 or ipv6 %}
         unit 0 {
             {% if ipv4 %}
-            {% printIps(ipv4) %}
+            {{ printIps(ipv4) }}
             {% endif %}
         }
         {% endif %}
