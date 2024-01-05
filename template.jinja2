@@ -46,14 +46,14 @@ interfaces {
             {% if ipv6 %}
             {{ printIps(iface, ipv6)|indent(12, False) }}
             {% endif %}
-        {% elif iface.untagged_vlan or iface.tagged_vlans %}
+        {% elif iface.untagged_vlan or iface.tagged_vlans.count() %}
             family ethernet_switching {
                 {% if iface.untagged_vlan %}
                 interface-mode access;
                 members {{ iface.untagged_vlan }};
                 {% else %}
                 interface-mode trunk;
-                members [ {{ iface.tagged_vlans|join(', ') }} ];
+                members [ {{ iface.tagged_vlans.all()|join(', ') }} ];
                 {% endif %}
             }
         {% endif %}
