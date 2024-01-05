@@ -20,11 +20,18 @@ interfaces {
                 {% set vrrp = none %}
                 {% for fhrp in fhrps %}
                     {% set vips = fhrp.group.ip_addresses.all() %}
-                    {% if vips and vips[0].network == ip.network %}
-                    VRRP ON
-                    {% endif %}
+                    {% set vrrp = fhrp if vips and vips[0].network == ip.network else None %}
                 {% endfor %}
+                {% if vrrp %}
+                address {{ ip }} {
+                    vrrp-group {{ vrrp.group }} {
+                        virtual-address {{ vrrp.group.ip_addresses.get().host }};
+                        priority {{ vrrp.priority }};
+                    }
+                }
+                {% else %}
                 address {{ ip }};
+                {% endif %}
                 {% endfor %}
             }
             {% endif %}
