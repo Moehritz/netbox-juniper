@@ -17,7 +17,7 @@ interfaces {
             {% set fhrps = iface.fhrp_group_assignments.all() %}
             family inet {
                 {% for ip in ipv4 %}
-                {% set vrrp = none %}
+                {% set vrrp = None %}
                 {% for fhrp in fhrps %}
                     {% set vips = fhrp.group.ip_addresses.all() %}
                     {% set vrrp = fhrp if vips and vips[0].network == ip.network else None %}
