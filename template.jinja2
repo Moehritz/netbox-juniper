@@ -53,7 +53,7 @@ interfaces {
                 members {{ iface.untagged_vlan }};
                 {% else %}
                 interface-mode trunk;
-                members [ {{ iface.tagged_vlans.all() | map(attribute='name') | join(', ') }} ];
+                members [ {{ iface.tagged_vlans.all() | map(attribute='name') | join(' ') }} ];
                 {% endif %}
             }
         {% endif %}
