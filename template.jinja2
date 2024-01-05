@@ -13,7 +13,11 @@ interfaces {
             family inet {
                 {% for ip in iface.ip_addresses.filter(address__net_contained="0/0") %}
                 address {{ ip }};
-                {{ ip.address }} {{ ip.address.version }}
+                {% endfor %}
+            }
+            family inet6 {
+                {% for ip in iface.ip_addresses.filter(address__net_contained="::/0") %}
+                address {{ ip }};
                 {% endfor %}
             }
         }
